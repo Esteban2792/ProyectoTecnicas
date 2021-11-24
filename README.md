@@ -1,0 +1,2 @@
+# ProyectoTecnicas
+ Evaluar lo aprendido
