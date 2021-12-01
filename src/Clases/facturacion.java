@@ -20,6 +20,7 @@ public class facturacion {
     private double impuesto;
     private double total;
     private String nombreCajero;
+    //Haciendo un cambio
 
     public String getFecha() {
         return fecha;
