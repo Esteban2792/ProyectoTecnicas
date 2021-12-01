@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package LoginPack;
+package Clases;
 
 import java.sql.*;
 
 public class Conexion {
     
     public static Connection ConectaBaseDatos(){
-        String url="jdbc:sqlserver://localhost:51858;"
+        String url="jdbc:sqlserver://localhost:49963;" //Mi puerto Esteban 49963
                 +"database=pruebaUno;"
                 +"user=sa;"
                 +"password=1234;";
