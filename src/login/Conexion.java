@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 public class Conexion {
     
     public static Connection ConectaBaseDatos(){
-        String url="jdbc:sqlserver://localhost:51858;" //
+        String url="jdbc:sqlserver://localhost:49963;" //
                 +"database=pruebaUno;"
                 +"user=sa;"
                 +"password=1234;";
