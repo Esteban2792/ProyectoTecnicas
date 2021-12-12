@@ -13,8 +13,8 @@ public class DoctorPaciente extends javax.swing.JFrame {
 
    
     Conexion BaseDatos = new Conexion();
-        Connection ingresa = BaseDatos.ConectaBaseDatos();
-        PreparedStatement registra;
+        Connection ingresa = Conexion.getConnection();
+       // PreparedStatement registra;
         
     public DoctorPaciente() {
         initComponents();
@@ -22,31 +22,33 @@ public class DoctorPaciente extends javax.swing.JFrame {
 
    void AgregaPaciente(){
        
-       String nombre = txtNombre.getText();
+      //Conexion con = (Conexion) Conexion.getConnection();
+        String nombre = txtNombre.getText();
         String civil = (String) cboCivil.getSelectedItem();
         String estado = (String) cboEstado.getSelectedItem();
-        String insertar = "INSERT INTO pacientes (identificacion,nombre,apellidos,estadoCivil,patologia,telefono,email,estadoPaciente) values(?,?,?,?,?,?,?,?)";
-        try{
-            registra = ingresa.prepareCall(insertar);
-            registra.setString(1, txtID.getText());
-            registra.setString(2, nombre);
-            registra.setString(3, txtApellidos.getText());
-            registra.setString(4, civil);
-            registra.setString(5, txtPatologia.getText());
-            registra.setString(6, txtTelefono.getText());
-            registra.setString(7, txtCorreo.getText());
-            registra.setString(8, estado);
-            int agregar = registra.executeUpdate();
-            
+        String query = "INSERT INTO pacientes (identificacion,nombre,apellidos,estadoCivil,patologia,telefono,email,estadoPaciente) "
+                                                    + " values(?,?,?,?,?,?,?,?)";
+        try {
+            java.sql.PreparedStatement ps = ingresa.prepareStatement(query);
+            ps.setString(1, txtID.getText());
+            ps.setString(2, nombre);
+            ps.setString(3,  txtApellidos.getText());
+            ps.setString(4, civil);
+            ps.setString(5, txtPatologia.getText());
+            ps.setString(6, txtTelefono.getText());
+            ps.setString(7,txtCorreo.getText());
+            ps.setString(8, estado);
+           int agregar = ps.executeUpdate();
+        ingresa.close();
             if (agregar >0){
                 JOptionPane.showMessageDialog(this, "Usuario agregado exitosamente","Bien", JOptionPane.QUESTION_MESSAGE);
             }else{
                  JOptionPane.showMessageDialog(this, "Usuario NO agregado","Atención", JOptionPane.ERROR_MESSAGE);
-                
+  
             }
         } catch(Exception e){
         }
-       
+    
    }
     
     
@@ -161,7 +163,7 @@ public class DoctorPaciente extends javax.swing.JFrame {
         });
         jPanel1.add(btnListaPacientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 410, -1, -1));
 
-        cboCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Soltero(a)", "Casado(a)", "Divorciado(a)", "Viudo(a)", "Unión Libre" }));
+        cboCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Soltero", "Casado", "Divorciado", "Viudo", "Unión Libre" }));
         cboCivil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboCivilActionPerformed(evt);
@@ -169,7 +171,7 @@ public class DoctorPaciente extends javax.swing.JFrame {
         });
         jPanel1.add(cboCivil, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 130, -1));
 
-        cboEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
+        cboEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "0" }));
         jPanel1.add(cboEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 350, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 450));
@@ -194,8 +196,7 @@ public class DoctorPaciente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButtonAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarActionPerformed
-        
-         AgregaPaciente();
+        AgregaPaciente();   
        
     }//GEN-LAST:event_jButtonAgregarActionPerformed
 

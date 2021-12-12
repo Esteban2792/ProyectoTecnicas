@@ -13,7 +13,7 @@ public class pacientes extends javax.swing.JFrame {
 
    
     Conexion BaseDatos = new Conexion();
-        Connection ingresa = BaseDatos.ConectaBaseDatos();
+        Connection ingresa = (Connection)Conexion.getConnection();
         PreparedStatement registra;
         
     public pacientes() {

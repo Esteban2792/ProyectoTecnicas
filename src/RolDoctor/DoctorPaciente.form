@@ -253,10 +253,10 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="5">
-                <StringItem index="0" value="Soltero(a)"/>
-                <StringItem index="1" value="Casado(a)"/>
-                <StringItem index="2" value="Divorciado(a)"/>
-                <StringItem index="3" value="Viudo(a)"/>
+                <StringItem index="0" value="Soltero"/>
+                <StringItem index="1" value="Casado"/>
+                <StringItem index="2" value="Divorciado"/>
+                <StringItem index="3" value="Viudo"/>
                 <StringItem index="4" value="Uni&#xf3;n Libre"/>
               </StringArray>
             </Property>
@@ -277,8 +277,8 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="2">
-                <StringItem index="0" value="Activo"/>
-                <StringItem index="1" value="Inactivo"/>
+                <StringItem index="0" value="1"/>
+                <StringItem index="1" value="0"/>
               </StringArray>
             </Property>
           </Properties>

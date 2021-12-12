@@ -80,7 +80,7 @@ public class Inicio extends javax.swing.JFrame {
         
        try{
            
-        Connection conecta = Conexion.ConectaBaseDatos();
+        Connection conecta = Conexion.getConnection();
         PreparedStatement PrecompilaSQL = conecta.prepareStatement(url);
         ResultSet MantieneDatos = PrecompilaSQL.executeQuery();
         
