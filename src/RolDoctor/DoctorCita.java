@@ -5,15 +5,85 @@
  */
 package RolDoctor;
 
+import java.beans.Statement;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import login.Conexion;
 
 public class DoctorCita extends javax.swing.JFrame {
 
+    Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
+    CallableStatement SeleccionaTabla;
+    
     /**
      * Creates new form Citas
      */
     public DoctorCita() {
         initComponents();
     }
+
+    private void cargarlista() {
+        // TODO Auto-generated method stub
+       
+        String query = "SELECT idHospital FROM hospitales";
+
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String tmpStrObtenido = rs.getString("idHospital");
+
+                cbohospital.addItem(tmpStrObtenido);
+            }
+// ingresa.close();
+
+        } catch (Exception e) {
+            System.out.println("ERROR: Al cargar de la base de datos.");
+        }
+            
+    }
+
+    private void cargarlistaCirugia() {
+        // TODO Auto-generated method stub
+        String query2 = "SELECT idOperacion FROM operaciones";
+
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+           java.sql.ResultSet rs2 = st.executeQuery(query2);
+            while (rs2.next()) {
+                String tmpStrObtenido2 = rs2.getString("idOperacion");
+
+                cboCirugias.addItem(tmpStrObtenido2);
+
+            }
+
+           // ingresa.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: Al cargar de la base de datos.");
+        }
+
+    }
+    
+    void VerPaciente(){
+            String query = "SELECT * FROM pacientes WHERE identificacion = '"+txtID.getText().trim()+"'";
+            try {
+                java.sql.Statement st = ingresa.createStatement();
+                java.sql.ResultSet rs = st.executeQuery(query);
+                while (rs.next()) {
+                    txtNombre.setText(rs.getString("nombre")+" "+rs.getString("apellidos"));
+                    txtIdPaciente.setText(rs.getString("idPaciente"));
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,25 +97,26 @@ public class DoctorCita extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbohospital = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cboCirugias = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         txtFecha = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
-        lblNombre = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         btnListaCitas = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtIdPaciente = new javax.swing.JTextField();
+        btnPacienteId = new javax.swing.JButton();
+        txtNombre = new javax.swing.JTextField();
+        lblFecha = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
         jPanel1.setMinimumSize(new java.awt.Dimension(500, 365));
         jPanel1.setVerifyInputWhenFocusTarget(false);
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -56,32 +127,36 @@ public class DoctorCita extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Hospital");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 120, -1));
+        cbohospital.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona" }));
+        cbohospital.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbohospitalActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cbohospital, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 120, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Cirugía");
+        jLabel2.setText("ID Operación");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 210, 120, -1));
+        cboCirugias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona" }));
+        cboCirugias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboCirugiasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cboCirugias, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 120, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setText("Fecha");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
-
-        txtFecha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 150, 30));
+        jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 130, 30));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Identificación:");
@@ -98,14 +173,8 @@ public class DoctorCita extends javax.swing.JFrame {
         });
         jPanel1.add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 190, 30));
 
-        lblNombre.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 290, 30));
-
         jButton2.setText("Ingresar");
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
-
-        jButton3.setText("Consultar");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, -1, -1));
 
         btnListaCitas.setText("Consultar Lista");
         btnListaCitas.addActionListener(new java.awt.event.ActionListener() {
@@ -113,20 +182,36 @@ public class DoctorCita extends javax.swing.JFrame {
                 btnListaCitasActionPerformed(evt);
             }
         });
-        jPanel1.add(btnListaCitas, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, -1, -1));
+        jPanel1.add(btnListaCitas, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("ID Paciente:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtIdPaciente.setEditable(false);
+        txtIdPaciente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtIdPacienteActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 120, 30));
+        jPanel1.add(txtIdPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 120, 30));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-1, 1, 440, 380));
+        btnPacienteId.setText("Ver");
+        btnPacienteId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPacienteIdActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnPacienteId, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, 50, 30));
+
+        txtNombre.setEditable(false);
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, 220, 30));
+
+        lblFecha.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        lblFecha.setText("Año/Mes/Fecha");
+        jPanel1.add(lblFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, -1, -1));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-1, 1, 470, 400));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -134,10 +219,6 @@ public class DoctorCita extends javax.swing.JFrame {
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDActionPerformed
-
-    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
@@ -147,17 +228,34 @@ public class DoctorCita extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtIdPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPacienteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtIdPacienteActionPerformed
 
     private void btnListaCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaCitasActionPerformed
-        
+
         ListaCitas VentanaListaCitas = new ListaCitas();
         VentanaListaCitas.setVisible(true);
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_btnListaCitasActionPerformed
+
+    private void cboCirugiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCirugiasActionPerformed
+        // TODO add your handling code here:
+        cargarlistaCirugia();
+        
+    }//GEN-LAST:event_cboCirugiasActionPerformed
+
+    private void cbohospitalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbohospitalActionPerformed
+        // TODO add your handling code here:
+        cargarlista();
+       
+    }//GEN-LAST:event_cbohospitalActionPerformed
+
+    private void btnPacienteIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPacienteIdActionPerformed
+        // TODO add your handling code here:
+        VerPaciente();
+    }//GEN-LAST:event_btnPacienteIdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,11 +297,11 @@ public class DoctorCita extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnListaCitas;
+    private javax.swing.JButton btnPacienteId;
+    private javax.swing.JComboBox<String> cboCirugias;
+    private javax.swing.JComboBox<String> cbohospital;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -211,9 +309,10 @@ public class DoctorCita extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblFecha;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtIdPaciente;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
