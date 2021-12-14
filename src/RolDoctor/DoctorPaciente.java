@@ -14,68 +14,74 @@ import javax.swing.table.DefaultTableModel;
 
 public class DoctorPaciente extends javax.swing.JFrame {
 
-   
     Conexion BaseDatos = new Conexion();
-        Connection ingresa = Conexion.getConnection();
-       // PreparedStatement registra;
-        
+    Connection ingresa = Conexion.getConnection();
+    // PreparedStatement registra;
+
     public DoctorPaciente() {
         initComponents();
     }
 
-   void AgregaPaciente(){
-       
-      //Conexion con = (Conexion) Conexion.getConnection();
+    void AgregaPaciente() {
+
+        //Conexion con = (Conexion) Conexion.getConnection();
         String nombre = txtNombre.getText();
         String civil = (String) cboCivil.getSelectedItem();
         String estado = (String) cboEstado.getSelectedItem();
         String query = "INSERT INTO pacientes (identificacion,nombre,apellidos,estadoCivil,patologia,telefono,email,estadoPaciente) "
-                                                    + " values(?,?,?,?,?,?,?,?)";
+                + " values(?,?,?,?,?,?,?,?)";
         try {
             java.sql.PreparedStatement ps = ingresa.prepareStatement(query);
             ps.setString(1, txtID.getText());
             ps.setString(2, nombre);
-            ps.setString(3,  txtApellidos.getText());
+            ps.setString(3, txtApellidos.getText());
             ps.setString(4, civil);
             ps.setString(5, txtPatologia.getText());
             ps.setString(6, txtTelefono.getText());
-            ps.setString(7,txtCorreo.getText());
+            ps.setString(7, txtCorreo.getText());
             ps.setString(8, estado);
-           int agregar = ps.executeUpdate();
-        ingresa.close();
-            if (agregar >0){
-                JOptionPane.showMessageDialog(this, "Usuario agregado exitosamente","Bien", JOptionPane.QUESTION_MESSAGE);
-            }else{
-                 JOptionPane.showMessageDialog(this, "Usuario NO agregado","Atención", JOptionPane.ERROR_MESSAGE);
-  
+            int agregar = ps.executeUpdate();
+            ingresa.close();
+            if (agregar > 0) {
+                JOptionPane.showMessageDialog(this, "Usuario agregado exitosamente", "Bien", JOptionPane.QUESTION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario NO agregado", "Atención", JOptionPane.ERROR_MESSAGE);
+
             }
-        } catch(Exception e){
+        } catch (Exception e) {
+        } finally {
+            txtID.setText("");
+            txtNombre.setText("");
+            txtApellidos.setText("");
+            cboCivil.setSelectedItem("Soltero");
+            txtTelefono.setText("");
+            txtCorreo.setText("");
+            txtPatologia.setText("");
+            cboEstado.setSelectedItem("1");
         }
-    
-   }
-    
+
+    }
+
     public void consultarDatosPaciente() {
-            
-            String query = "SELECT * FROM pacientes WHERE identificacion = '"+txtID.getText().trim()+"'";
-            try {
-                java.sql.Statement st = ingresa.createStatement();
-                java.sql.ResultSet rs = st.executeQuery(query);
-                while (rs.next()) {
-                  txtNombre.setText(rs.getString("nombre"));
-                    txtApellidos.setText(rs.getString("apellidos"));
-                    cboCivil.setSelectedItem(rs.getString("estadoCivil"));
-                    txtTelefono.setText(rs.getString("telefono"));
-                    txtCorreo.setText(rs.getString("email"));
-                    txtPatologia.setText(rs.getString("patologia"));
-                    cboEstado.setSelectedItem(rs.getString("estadoPaciente"));
-                }
-            } catch (Exception e) {
-                System.out.println(e);
+
+        String query = "SELECT * FROM pacientes WHERE identificacion = '" + txtID.getText().trim() + "'";
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                txtNombre.setText(rs.getString("nombre"));
+                txtApellidos.setText(rs.getString("apellidos"));
+                cboCivil.setSelectedItem(rs.getString("estadoCivil"));
+                txtTelefono.setText(rs.getString("telefono"));
+                txtCorreo.setText(rs.getString("email"));
+                txtPatologia.setText(rs.getString("patologia"));
+                cboEstado.setSelectedItem(rs.getString("estadoPaciente"));
             }
+        } catch (Exception e) {
+            System.out.println(e);
         }
-    
-  
-                 
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -102,7 +108,6 @@ public class DoctorPaciente extends javax.swing.JFrame {
         btnListaPacientes = new javax.swing.JButton();
         cboCivil = new javax.swing.JComboBox<>();
         cboEstado = new javax.swing.JComboBox<>();
-        jLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -183,7 +188,7 @@ public class DoctorPaciente extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 410, -1, -1));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 410, -1, -1));
 
         btnListaPacientes.setText("Lista de pacientes");
         btnListaPacientes.addActionListener(new java.awt.event.ActionListener() {
@@ -193,7 +198,7 @@ public class DoctorPaciente extends javax.swing.JFrame {
         });
         jPanel1.add(btnListaPacientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 410, -1, -1));
 
-        cboCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Soltero", "Casado", "Divorciado", "Viudo", "Unión Libre" }));
+        cboCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Soltero", "Casado", "Divorciado", "Viudo" }));
         cboCivil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboCivilActionPerformed(evt);
@@ -204,21 +209,12 @@ public class DoctorPaciente extends javax.swing.JFrame {
         cboEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "0" }));
         jPanel1.add(cboEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 350, -1, -1));
 
-        jLimpiar.setText("Limpiar");
-        jLimpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jLimpiarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, -1, -1));
-
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 450));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-        
-    
+
     private void txtPatologiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPatologiaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPatologiaActionPerformed
@@ -228,17 +224,17 @@ public class DoctorPaciente extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+
         menuDoctor VentanaMenuDoctor = new menuDoctor();
         VentanaMenuDoctor.setVisible(true);
         this.setVisible(false);
-     
-                
+
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButtonAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarActionPerformed
-        AgregaPaciente();   
-       
+        AgregaPaciente();
+
     }//GEN-LAST:event_jButtonAgregarActionPerformed
 
     private void cboCivilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCivilActionPerformed
@@ -246,29 +242,17 @@ public class DoctorPaciente extends javax.swing.JFrame {
     }//GEN-LAST:event_cboCivilActionPerformed
 
     private void btnListaPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaPacientesActionPerformed
-       
+
         ListaPaciente VentanaListaPaciente = new ListaPaciente();
         VentanaListaPaciente.setVisible(true);
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_btnListaPacientesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         consultarDatosPaciente();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimpiarActionPerformed
-        // TODO add your handling code here:
-        txtID.setText("");
-        txtNombre.setText("");
-        txtApellidos.setText("");
-        cboCivil.setSelectedItem("Soltero");
-        txtTelefono.setText("");
-        txtCorreo.setText("");
-        txtPatologia.setText("");
-        cboEstado.setSelectedItem("1");
-    }//GEN-LAST:event_jLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -324,7 +308,6 @@ public class DoctorPaciente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JButton jLimpiar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextField txtCorreo;

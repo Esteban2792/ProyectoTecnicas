@@ -5,16 +5,67 @@
  */
 package RolDoctor;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import login.Conexion;
+
 
 public class DoctorOperaciones extends javax.swing.JFrame {
 
     /**
      * Creates new form Servicios
      */
+    
+    Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
+        ResultSet resultado;
+
     public DoctorOperaciones() {
         initComponents();
     }
 
+    void AgregaOperacion(){
+        String TipoOperacion = (String) cboTipoOperacion.getSelectedItem();
+        String insertar = "INSERT INTO operaciones (idHospital, idDoctor, idPaciente, tipoOperacion) values (?,?,?,?)";
+        try{
+            java.sql.PreparedStatement registra = ingresa.prepareCall(insertar);
+            registra.setString(1, txtIdHospital.getText());
+            registra.setString(2, txtIdDoctor.getText());
+            registra.setString(3, txtIdPaciente.getText());
+            registra.setString(4, TipoOperacion);
+            int agregar = registra.executeUpdate();
+            if (agregar > 0){
+                JOptionPane.showMessageDialog(this, "Operación agregada exitosamente","Bien", JOptionPane.QUESTION_MESSAGE);
+            }else{
+                 JOptionPane.showMessageDialog(this, "Operación NO agregada","Atención", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch(Exception e){
+        } finally {
+            txtidoperacion.setText("");
+                txtIdHospital.setText("");
+                txtIdDoctor.setText("");
+                txtIdPaciente.setText("");
+                cboTipoOperacion.setSelectedItem("");
+        }
+   }
+    
+ void consultarDatosOperacion(){
+            String query = "SELECT * FROM operaciones WHERE idOperacion = '"+txtidoperacion.getText().trim()+"'";
+            try {
+                java.sql.Statement st = ingresa.createStatement();
+                java.sql.ResultSet rs = st.executeQuery(query);
+                while (rs.next()) {
+                    txtIdHospital.setText(rs.getString("idHospital"));
+                    txtIdDoctor.setText(rs.getString("idDoctor"));
+                    txtIdPaciente.setText(rs.getString("idPaciente"));
+                    cboTipoOperacion.setSelectedItem(rs.getString("tipoOperacion"));
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }   
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,12 +81,12 @@ public class DoctorOperaciones extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cboTipoOperacion = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtidoperacion = new javax.swing.JTextField();
+        txtIdHospital = new javax.swing.JTextField();
+        txtIdDoctor = new javax.swing.JTextField();
+        txtIdPaciente = new javax.swing.JTextField();
         btnIngresarOperaciones = new javax.swing.JButton();
         btnConsultarOperaciones = new javax.swing.JButton();
         btnlistaOperaciones = new javax.swing.JButton();
@@ -71,21 +122,31 @@ public class DoctorOperaciones extends javax.swing.JFrame {
         jLabel4.setText("ID Paciente");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, 90, 20));
+        cboTipoOperacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ambulatoria", "Maxilofacial", "Vesicula" }));
+        jPanel1.add(cboTipoOperacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, 110, 30));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Tipo de Operación");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 120, 30));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, 120, 30));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 120, 30));
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, 120, 30));
+        jPanel1.add(txtidoperacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 120, 30));
+        jPanel1.add(txtIdHospital, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, 120, 30));
+        jPanel1.add(txtIdDoctor, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 120, 30));
+        jPanel1.add(txtIdPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, 120, 30));
 
         btnIngresarOperaciones.setText("Ingresar");
+        btnIngresarOperaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarOperacionesActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnIngresarOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
         btnConsultarOperaciones.setText("Consultar");
+        btnConsultarOperaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarOperacionesActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnConsultarOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, -1, -1));
 
         btnlistaOperaciones.setText("Consultar Lista");
@@ -120,6 +181,16 @@ public class DoctorOperaciones extends javax.swing.JFrame {
         this.setVisible(false);
         
     }//GEN-LAST:event_btnlistaOperacionesActionPerformed
+
+    private void btnIngresarOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarOperacionesActionPerformed
+        // TODO add your handling code here:
+        AgregaOperacion();
+    }//GEN-LAST:event_btnIngresarOperacionesActionPerformed
+
+    private void btnConsultarOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarOperacionesActionPerformed
+        // TODO add your handling code here:
+        consultarDatosOperacion();
+    }//GEN-LAST:event_btnConsultarOperacionesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,8 +234,8 @@ public class DoctorOperaciones extends javax.swing.JFrame {
     private javax.swing.JButton btnConsultarOperaciones;
     private javax.swing.JButton btnIngresarOperaciones;
     private javax.swing.JButton btnlistaOperaciones;
+    private javax.swing.JComboBox<String> cboTipoOperacion;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -172,9 +243,9 @@ public class DoctorOperaciones extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField txtIdDoctor;
+    private javax.swing.JTextField txtIdHospital;
+    private javax.swing.JTextField txtIdPaciente;
+    private javax.swing.JTextField txtidoperacion;
     // End of variables declaration//GEN-END:variables
 }

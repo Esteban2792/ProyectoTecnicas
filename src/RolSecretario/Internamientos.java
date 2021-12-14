@@ -5,19 +5,58 @@
  */
 package RolSecretario;
 
+import java.sql.Connection;
+import login.Conexion;
+
 /**
  *
  * @author Pc
  */
 public class Internamientos extends javax.swing.JFrame {
-
+Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
     /**
      * Creates new form Internamientos
      */
     public Internamientos() {
         initComponents();
     }
+ void consultarDatosInternamiento(){
+     String idInternamiento = (String) cboIdInternamiento.getSelectedItem();
+            String query = "SELECT * FROM internamientos WHERE idInternamiento = '"+idInternamiento+"'";
+            try {
+                java.sql.Statement st = ingresa.createStatement();
+                java.sql.ResultSet rs = st.executeQuery(query);
+                while (rs.next()) {
+                   lblInternamientoHospital.setText(rs.getString("idHospital"));
+                    lblInternamientoPaciente.setText(rs.getString("idPaciente"));
+                    lblInternamientoMotivo.setText(rs.getString("motivo"));
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }   
+ 
+ private void cargarIdInternamientol() {
+        // TODO Auto-generated method stub
 
+        String query = "SELECT idInternamiento FROM internamientos";
+
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String tmpStrObtenido = rs.getString("idInternamiento");
+
+                cboIdInternamiento.addItem(tmpStrObtenido);
+            }
+// ingresa.close();
+
+        } catch (Exception e) {
+            System.out.println("ERROR: Al cargar de la base de datos.");
+        }
+
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,7 +71,6 @@ public class Internamientos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtInternamiento = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         btnMenu = new javax.swing.JButton();
         btnConsultarInternamiento = new javax.swing.JButton();
@@ -40,6 +78,7 @@ public class Internamientos extends javax.swing.JFrame {
         lblInternamientoMotivo = new javax.swing.JLabel();
         lblInternamientoHospital = new javax.swing.JLabel();
         lblInternamientoPaciente = new javax.swing.JLabel();
+        cboIdInternamiento = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -63,13 +102,6 @@ public class Internamientos extends javax.swing.JFrame {
         jLabel4.setText("Motivo");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
 
-        txtInternamiento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtInternamientoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtInternamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 110, 30));
-
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Internamientos");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, -1, 30));
@@ -83,6 +115,11 @@ public class Internamientos extends javax.swing.JFrame {
         jPanel1.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, -1, -1));
 
         btnConsultarInternamiento.setText("Consultar");
+        btnConsultarInternamiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarInternamientoActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnConsultarInternamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, -1, -1));
 
         btnListaInternamientos.setText("Consultar lista");
@@ -102,14 +139,18 @@ public class Internamientos extends javax.swing.JFrame {
         lblInternamientoPaciente.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblInternamientoPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 160, 30));
 
+        cboIdInternamiento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona" }));
+        cboIdInternamiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboIdInternamientoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cboIdInternamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 120, 30));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 7, 430, 340));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtInternamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInternamientoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtInternamientoActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         
@@ -126,6 +167,16 @@ public class Internamientos extends javax.swing.JFrame {
         this.setVisible(false);
         
     }//GEN-LAST:event_btnListaInternamientosActionPerformed
+
+    private void btnConsultarInternamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarInternamientoActionPerformed
+        // TODO add your handling code here:
+        consultarDatosInternamiento();
+    }//GEN-LAST:event_btnConsultarInternamientoActionPerformed
+
+    private void cboIdInternamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboIdInternamientoActionPerformed
+        // TODO add your handling code here:
+        cargarIdInternamientol();
+    }//GEN-LAST:event_cboIdInternamientoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -166,6 +217,7 @@ public class Internamientos extends javax.swing.JFrame {
     private javax.swing.JButton btnConsultarInternamiento;
     private javax.swing.JButton btnListaInternamientos;
     private javax.swing.JButton btnMenu;
+    private javax.swing.JComboBox<String> cboIdInternamiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -175,6 +227,5 @@ public class Internamientos extends javax.swing.JFrame {
     private javax.swing.JLabel lblInternamientoHospital;
     private javax.swing.JLabel lblInternamientoMotivo;
     private javax.swing.JLabel lblInternamientoPaciente;
-    private javax.swing.JTextField txtInternamiento;
     // End of variables declaration//GEN-END:variables
 }

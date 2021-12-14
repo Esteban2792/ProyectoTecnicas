@@ -5,15 +5,48 @@
  */
 package RolSecretario;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import login.Conexion;
+
 
 public class HospitalesSecretarioLista extends javax.swing.JFrame {
-
+Conexion BaseDatos = new Conexion();
+        Connection ingresa = Conexion.getConnection();
+        CallableStatement SeleccionaTabla;
+ResultSet resultado;
+    /**
     /**
      * Creates new form ListaHospital
      */
     public HospitalesSecretarioLista() {
         initComponents();
     }
+ public void CargarListaHospitales(){
+            DefaultTableModel tabla= new DefaultTableModel();
+       try{
+       tabla.addColumn("idHospital");
+       tabla.addColumn("tipoPropiedad");
+       tabla.addColumn("consultorios");
+       tabla.addColumn("niveles");
+       tabla.addColumn("color");
+       tabla.addColumn("tipoCirugias");
+       tabla.addColumn("descripcion");
+       
+       SeleccionaTabla=ingresa.prepareCall("Select * from hospitales");
+       resultado=SeleccionaTabla.executeQuery();
+       while (resultado.next()){
+       Object datos[]=new  Object[7];
+       for (int filas=0; filas<7; filas++){
+           datos[filas]=resultado.getString(filas+1);
+       }
+       tabla.addRow(datos);
+       }
+       this.jthospitales.setModel(tabla);//jTable---jdatos
+       }catch (Exception e){}
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,7 +60,7 @@ public class HospitalesSecretarioLista extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jthospitales = new javax.swing.JTable();
         btnRegresarHospital = new javax.swing.JButton();
         btnConsultarListaHospitales = new javax.swing.JButton();
 
@@ -41,7 +74,9 @@ public class HospitalesSecretarioLista extends javax.swing.JFrame {
         jLabel1.setText("Lista de Hospitales");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, -1, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jthospitales.setAutoCreateRowSorter(true);
+        jthospitales.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jthospitales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -52,7 +87,7 @@ public class HospitalesSecretarioLista extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jthospitales);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 540, 340));
 
@@ -65,6 +100,11 @@ public class HospitalesSecretarioLista extends javax.swing.JFrame {
         jPanel1.add(btnRegresarHospital, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 410, -1, -1));
 
         btnConsultarListaHospitales.setText("Consultar");
+        btnConsultarListaHospitales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarListaHospitalesActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnConsultarListaHospitales, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 410, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 450));
@@ -79,6 +119,11 @@ public class HospitalesSecretarioLista extends javax.swing.JFrame {
         this.setVisible(false);  
         
     }//GEN-LAST:event_btnRegresarHospitalActionPerformed
+
+    private void btnConsultarListaHospitalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarListaHospitalesActionPerformed
+        // TODO add your handling code here:
+        CargarListaHospitales();
+    }//GEN-LAST:event_btnConsultarListaHospitalesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,6 +167,6 @@ public class HospitalesSecretarioLista extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jthospitales;
     // End of variables declaration//GEN-END:variables
 }

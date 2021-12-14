@@ -5,11 +5,18 @@
  */
 package RolSecretario;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import login.Conexion;
+
 /**
  *
  * @author Pc
  */
 public class Operaciones extends javax.swing.JFrame {
+Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
+        ResultSet resultado;
 
     /**
      * Creates new form Servicios
@@ -18,6 +25,21 @@ public class Operaciones extends javax.swing.JFrame {
         initComponents();
     }
 
+     void consultarDatosOperacion(){
+            String query = "SELECT * FROM operaciones WHERE idOperacion = '"+txtidoperacion.getText().trim()+"'";
+            try {
+                java.sql.Statement st = ingresa.createStatement();
+                java.sql.ResultSet rs = st.executeQuery(query);
+                while (rs.next()) {
+                    lblOperacionHospital.setText(rs.getString("idHospital"));
+                    lblOperacionDoctor.setText(rs.getString("idDoctor"));
+                    lblOperacionPaciente.setText(rs.getString("idPaciente"));
+                    lblTipoOperacion.setText(rs.getString("tipoOperacion"));
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,7 +56,7 @@ public class Operaciones extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtOperacion = new javax.swing.JTextField();
+        txtidoperacion = new javax.swing.JTextField();
         btnConsultarOperaciones = new javax.swing.JButton();
         btnlistaOperaciones = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -76,9 +98,14 @@ public class Operaciones extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Tipo de Operación");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
-        jPanel1.add(txtOperacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 130, 30));
+        jPanel1.add(txtidoperacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 130, 30));
 
         btnConsultarOperaciones.setText("Consultar");
+        btnConsultarOperaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarOperacionesActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnConsultarOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
 
         btnlistaOperaciones.setText("Consultar Lista");
@@ -125,6 +152,11 @@ public class Operaciones extends javax.swing.JFrame {
         this.setVisible(false);
         
     }//GEN-LAST:event_btnlistaOperacionesActionPerformed
+
+    private void btnConsultarOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarOperacionesActionPerformed
+        // TODO add your handling code here:
+        consultarDatosOperacion();
+    }//GEN-LAST:event_btnConsultarOperacionesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,6 +209,6 @@ public class Operaciones extends javax.swing.JFrame {
     private javax.swing.JLabel lblOperacionHospital;
     private javax.swing.JLabel lblOperacionPaciente;
     private javax.swing.JLabel lblTipoOperacion;
-    private javax.swing.JTextField txtOperacion;
+    private javax.swing.JTextField txtidoperacion;
     // End of variables declaration//GEN-END:variables
 }

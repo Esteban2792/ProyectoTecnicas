@@ -21,15 +21,52 @@ public class pacientes extends javax.swing.JFrame {
     }
 
   
+    public void consultarDatosPaciente() {
+String idPaciente = (String) cboidPaciente.getSelectedItem();
+        String query = "SELECT * FROM pacientes WHERE identificacion = '" + idPaciente.trim() + "'";
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                lblPacienteNombre.setText(rs.getString("nombre"));
+                lblPacienteApellidos.setText(rs.getString("apellidos"));
+                lblPacienteCivil.setText(rs.getString("estadoCivil"));
+                lblPacienteTelefono.setText(rs.getString("telefono"));
+                lblPacienteCorreo.setText(rs.getString("email"));
+                lblPacientePatologia.setText(rs.getString("patologia"));
+                lblPacienteEstado.setText(rs.getString("estadoPaciente"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
     
-    
+    private void cargarIdPacientes() {
+        // TODO Auto-generated method stub
+
+        String query = "SELECT identificacion FROM pacientes";
+
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String tmpStrObtenido = rs.getString("identificacion");
+
+                cboidPaciente.addItem(tmpStrObtenido);
+            }
+// ingresa.close();
+
+        } catch (Exception e) {
+            System.out.println("ERROR: Al cargar de la base de datos.");
+        }
+
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtIDPaciente = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -49,19 +86,25 @@ public class pacientes extends javax.swing.JFrame {
         lblPacienteCorreo = new javax.swing.JLabel();
         lblPacientePatologia = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        cboidPaciente = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel1.setForeground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Identificación");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
-        jPanel1.add(txtIDPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 220, 30));
 
         jButton1.setText("Consultar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -109,24 +152,32 @@ public class pacientes extends javax.swing.JFrame {
         });
         jPanel1.add(btnListaPacienteSecretario, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 430, -1, -1));
 
+        lblPacienteEstado.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         lblPacienteEstado.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblPacienteEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, 160, 30));
 
+        lblPacienteNombre.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        lblPacienteNombre.setForeground(new java.awt.Color(0, 0, 0));
         lblPacienteNombre.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblPacienteNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 180, 30));
 
+        lblPacienteApellidos.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         lblPacienteApellidos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblPacienteApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 200, 30));
 
+        lblPacienteCivil.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         lblPacienteCivil.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblPacienteCivil, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 160, 30));
 
+        lblPacienteTelefono.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         lblPacienteTelefono.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblPacienteTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 250, 160, 30));
 
+        lblPacienteCorreo.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         lblPacienteCorreo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblPacienteCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 190, 30));
 
+        lblPacientePatologia.setFont(lblPacientePatologia.getFont().deriveFont(lblPacientePatologia.getFont().getStyle() | java.awt.Font.BOLD));
         lblPacientePatologia.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblPacientePatologia, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 330, 190, 30));
 
@@ -134,7 +185,15 @@ public class pacientes extends javax.swing.JFrame {
         jLabel17.setText("Pacientes");
         jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 470));
+        cboidPaciente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona" }));
+        cboidPaciente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboidPacienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cboidPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, -1, -1));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -154,6 +213,16 @@ public class pacientes extends javax.swing.JFrame {
         this.setVisible(false);
         
     }//GEN-LAST:event_btnListaPacienteSecretarioActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        consultarDatosPaciente();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cboidPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboidPacienteActionPerformed
+        // TODO add your handling code here:
+        cargarIdPacientes();
+    }//GEN-LAST:event_cboidPacienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,6 +261,7 @@ public class pacientes extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnListaPacienteSecretario;
+    private javax.swing.JComboBox<String> cboidPaciente;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
@@ -212,6 +282,5 @@ public class pacientes extends javax.swing.JFrame {
     private javax.swing.JLabel lblPacienteNombre;
     private javax.swing.JLabel lblPacientePatologia;
     private javax.swing.JLabel lblPacienteTelefono;
-    private javax.swing.JTextField txtIDPaciente;
     // End of variables declaration//GEN-END:variables
 }

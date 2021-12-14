@@ -5,11 +5,19 @@
  */
 package RolSecretario;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import login.Conexion;
+
 /**
  *
  * @author Pc
  */
 public class Citas extends javax.swing.JFrame {
+
+    Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
+    CallableStatement SeleccionaTabla;
 
     /**
      * Creates new form Citas
@@ -18,6 +26,43 @@ public class Citas extends javax.swing.JFrame {
         initComponents();
     }
 
+    void ConsultarCita() {
+        String query = "SELECT * FROM citaPost WHERE idCitaP = '" + cboIdCita.getSelectedItem() + "'";
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                lblPaciente.setText(rs.getString("idPaciente"));
+                lblHospital.setText(rs.getString("idHospital"));
+                lblOperacion.setText(rs.getString("idOperacion"));
+                lblFecha.setText(rs.getString("fechaCita"));
+
+            }
+           ingresa.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+    }
+private void cargarIdCitas() {
+        // TODO Auto-generated method stub
+
+        String query = "SELECT idCitaP FROM citaPost";
+
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String tmpStrObtenido = rs.getString("idCitaP");
+
+                cboIdCita.addItem(tmpStrObtenido);
+            }
+// ingresa.close();
+
+        } catch (Exception e) {
+            System.out.println("ERROR: Al cargar de la base de datos.");
+        }
+
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,17 +78,15 @@ public class Citas extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtID = new javax.swing.JTextField();
-        lblNombre = new javax.swing.JLabel();
+        lblFecha = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        lblNombre1 = new javax.swing.JLabel();
-        lblNombre2 = new javax.swing.JLabel();
-        lblNombre3 = new javax.swing.JLabel();
-        lblNombre4 = new javax.swing.JLabel();
+        lblPaciente = new javax.swing.JLabel();
+        lblHospital = new javax.swing.JLabel();
+        lblOperacion = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        cboIdCita = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -62,36 +105,30 @@ public class Citas extends javax.swing.JFrame {
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 350, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("Hospital");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, -1, -1));
+        jLabel1.setText("Hospital:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Cirugía");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, -1));
+        jLabel2.setText("ID Operacion:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("Fecha");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
+        jLabel3.setText("Fecha:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setText("Identificación:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+        jLabel4.setText("ID Cita:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 100, 30));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel5.setText("Nombre:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
-
-        txtID.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIDActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 190, 30));
-
-        lblNombre.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 210, 30));
+        lblFecha.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(lblFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 210, 30));
 
         jButton3.setText("Consultar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, -1));
 
         jButton4.setText("Consultar Lista");
@@ -104,32 +141,33 @@ public class Citas extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("ID Paciente:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
-        lblNombre1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblNombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 290, 30));
+        lblPaciente.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(lblPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 100, 30));
 
-        lblNombre2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblNombre2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 100, 30));
+        lblHospital.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(lblHospital, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, 210, 30));
 
-        lblNombre3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblNombre3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 210, 30));
-
-        lblNombre4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblNombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 210, 30));
+        lblOperacion.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(lblOperacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, 210, 30));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel7.setText("Citas");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, -1, -1));
 
+        cboIdCita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona" }));
+        cboIdCita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboIdCitaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cboIdCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, -1, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-1, 1, 440, 390));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
@@ -140,12 +178,22 @@ public class Citas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+
         CitasSecretarioLista VentanaCitasSecretarioLista = new CitasSecretarioLista();
         VentanaCitasSecretarioLista.setVisible(true);
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        ConsultarCita();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void cboIdCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboIdCitaActionPerformed
+        // TODO add your handling code here:
+        cargarIdCitas();
+    }//GEN-LAST:event_cboIdCitaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -183,6 +231,7 @@ public class Citas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cboIdCita;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -190,15 +239,12 @@ public class Citas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblNombre;
-    private javax.swing.JLabel lblNombre1;
-    private javax.swing.JLabel lblNombre2;
-    private javax.swing.JLabel lblNombre3;
-    private javax.swing.JLabel lblNombre4;
-    private javax.swing.JTextField txtID;
+    private javax.swing.JLabel lblFecha;
+    private javax.swing.JLabel lblHospital;
+    private javax.swing.JLabel lblOperacion;
+    private javax.swing.JLabel lblPaciente;
     // End of variables declaration//GEN-END:variables
 }

@@ -32,11 +32,20 @@ public class menuSecretario extends javax.swing.JFrame {
         jButtonHospitales = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
         btnInternamientos = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        mHospital = new javax.swing.JMenuItem();
+        mPacientes = new javax.swing.JMenuItem();
+        mOperaciones = new javax.swing.JMenuItem();
+        mInternamientos = new javax.swing.JMenuItem();
+        mCitas = new javax.swing.JMenuItem();
+        mSalir = new javax.swing.JMenu();
+        mSalirS = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(204, 0, 204));
+        jPanel1.setBackground(new java.awt.Color(102, 153, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jbutonPacientes.setText("Pacientes");
@@ -88,6 +97,64 @@ public class menuSecretario extends javax.swing.JFrame {
         jPanel1.add(btnInternamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 300));
+
+        jMenu1.setText("Menu");
+
+        mHospital.setText("Consultar Hospitales");
+        mHospital.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mHospitalActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mHospital);
+
+        mPacientes.setText("Consultar Pacientes");
+        mPacientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mPacientesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mPacientes);
+
+        mOperaciones.setText("Consultar Operaciones");
+        mOperaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mOperacionesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mOperaciones);
+
+        mInternamientos.setText("Consultar Internamientos");
+        mInternamientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mInternamientosActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mInternamientos);
+
+        mCitas.setText("Consultar Citas");
+        mCitas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mCitasActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mCitas);
+
+        jMenuBar1.add(jMenu1);
+
+        mSalir.setText("Salir");
+
+        mSalirS.setText("Salir del Sistema");
+        mSalirS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mSalirSActionPerformed(evt);
+            }
+        });
+        mSalir.add(mSalirS);
+
+        jMenuBar1.add(mSalir);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -141,6 +208,49 @@ public class menuSecretario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnInternamientosActionPerformed
 
+    private void mHospitalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mHospitalActionPerformed
+        // TODO add your handling code here:
+         Hospitales AbrirVentanaHospitales = new Hospitales();
+        AbrirVentanaHospitales.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mHospitalActionPerformed
+
+    private void mPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPacientesActionPerformed
+        // TODO add your handling code here:
+        pacientes VentanaPacientes = new pacientes();
+        VentanaPacientes.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mPacientesActionPerformed
+
+    private void mOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mOperacionesActionPerformed
+        // TODO add your handling code here:
+         Operaciones AbrirVentanaServicios = new Operaciones();
+        AbrirVentanaServicios.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mOperacionesActionPerformed
+
+    private void mInternamientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mInternamientosActionPerformed
+        // TODO add your handling code here:
+          Internamientos VentanaInternamientos = new Internamientos();
+        VentanaInternamientos.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mInternamientosActionPerformed
+
+    private void mCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCitasActionPerformed
+        // TODO add your handling code here:
+        Citas AbrirVentanaCitas = new Citas();
+        AbrirVentanaCitas.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mCitasActionPerformed
+
+    private void mSalirSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSalirSActionPerformed
+        // TODO add your handling code here:
+            
+        Inicio AbrirVentanaLogin = new Inicio();
+        AbrirVentanaLogin.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mSalirSActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -185,7 +295,16 @@ public class menuSecretario extends javax.swing.JFrame {
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton jButtonCitas;
     private javax.swing.JButton jButtonHospitales;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbutonPacientes;
+    private javax.swing.JMenuItem mCitas;
+    private javax.swing.JMenuItem mHospital;
+    private javax.swing.JMenuItem mInternamientos;
+    private javax.swing.JMenuItem mOperaciones;
+    private javax.swing.JMenuItem mPacientes;
+    private javax.swing.JMenu mSalir;
+    private javax.swing.JMenuItem mSalirS;
     // End of variables declaration//GEN-END:variables
 }

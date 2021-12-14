@@ -5,11 +5,16 @@
  */
 package RolSecretario;
 
+import java.sql.Connection;
+import login.Conexion;
+
 /**
  *
  * @author Pc
  */
 public class Hospitales extends javax.swing.JFrame {
+Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
 
     /**
      * Creates new form Hospitales
@@ -17,7 +22,47 @@ public class Hospitales extends javax.swing.JFrame {
     public Hospitales() {
         initComponents();
     }
+public void consultarDatosHospital() {
+        
+String idHospital =  (String) cboIdHospita.getSelectedItem();
 
+        String query = "SELECT * FROM hospitales where idHospital = '" + idHospital + "'";
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+               lblPropiedad1.setText(rs.getString("tipoPropiedad"));
+                lblConsultorios1.setText(rs.getString("consultorios"));
+               lblniveles.setText(rs.getString("niveles"));
+               lblColor1.setText(rs.getString("color"));
+                lblCirugias.setText(rs.getString("tipoCirugias"));
+                lbldescripcion.setText(rs.getString("descripcion"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+    }
+
+private void cargarIdHospital() {
+        // TODO Auto-generated method stub
+
+        String query = "SELECT idHospital FROM hospitales";
+
+        try {
+            java.sql.Statement st = ingresa.createStatement();
+            java.sql.ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String tmpStrObtenido = rs.getString("idHospital");
+
+                cboIdHospita.addItem(tmpStrObtenido);
+            }
+// ingresa.close();
+
+        } catch (Exception e) {
+            System.out.println("ERROR: Al cargar de la base de datos.");
+        }
+
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,16 +81,16 @@ public class Hospitales extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        cboCirugias = new javax.swing.JComboBox<>();
         btnConsultarHospital = new javax.swing.JButton();
         BtnListaHospital = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        lblConsultorios = new javax.swing.JLabel();
+        lbldescripcion = new javax.swing.JLabel();
         lblPropiedad1 = new javax.swing.JLabel();
         lblConsultorios1 = new javax.swing.JLabel();
-        lblConsultorios2 = new javax.swing.JLabel();
-        txtHospital = new javax.swing.JTextField();
-        lblConsultorios3 = new javax.swing.JLabel();
+        lblniveles = new javax.swing.JLabel();
+        lblCirugias = new javax.swing.JLabel();
+        lblColor1 = new javax.swing.JLabel();
+        cboIdHospita = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -89,10 +134,12 @@ public class Hospitales extends javax.swing.JFrame {
         jLabel7.setText("Decsripción");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, -1));
 
-        cboCirugias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cboCirugias, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 340, 150, 30));
-
         btnConsultarHospital.setText("Consultar");
+        btnConsultarHospital.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarHospitalActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnConsultarHospital, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 450, -1, -1));
 
         BtnListaHospital.setText("Consultar Lista");
@@ -107,8 +154,8 @@ public class Hospitales extends javax.swing.JFrame {
         jLabel8.setText("Hospitales");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
 
-        lblConsultorios.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblConsultorios, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 250, 30));
+        lbldescripcion.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(lbldescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 250, 30));
 
         lblPropiedad1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblPropiedad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 200, 30));
@@ -116,20 +163,24 @@ public class Hospitales extends javax.swing.JFrame {
         lblConsultorios1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblConsultorios1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 200, 30));
 
-        lblConsultorios2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblConsultorios2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 240, 200, 30));
+        lblniveles.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(lblniveles, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 240, 200, 30));
 
-        txtHospital.addActionListener(new java.awt.event.ActionListener() {
+        lblCirugias.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(lblCirugias, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 340, 140, 30));
+
+        lblColor1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(lblColor1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 140, 30));
+
+        cboIdHospita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona" }));
+        cboIdHospita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtHospitalActionPerformed(evt);
+                cboIdHospitaActionPerformed(evt);
             }
         });
-        jPanel1.add(txtHospital, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 120, 30));
+        jPanel1.add(cboIdHospita, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 150, 30));
 
-        lblConsultorios3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(lblConsultorios3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 140, 30));
-
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 440, 500));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 450, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -142,10 +193,6 @@ public class Hospitales extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButtonMenuActionPerformed
 
-    private void txtHospitalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHospitalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtHospitalActionPerformed
-
     private void BtnListaHospitalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnListaHospitalActionPerformed
         
         HospitalesSecretarioLista VentanaHospitalesSecretarioLista = new HospitalesSecretarioLista();
@@ -153,6 +200,16 @@ public class Hospitales extends javax.swing.JFrame {
         this.setVisible(false);
         
     }//GEN-LAST:event_BtnListaHospitalActionPerformed
+
+    private void btnConsultarHospitalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarHospitalActionPerformed
+        // TODO add your handling code here:
+        consultarDatosHospital();
+    }//GEN-LAST:event_btnConsultarHospitalActionPerformed
+
+    private void cboIdHospitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboIdHospitaActionPerformed
+        // TODO add your handling code here:
+        cargarIdHospital();
+    }//GEN-LAST:event_cboIdHospitaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,7 +249,7 @@ public class Hospitales extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnListaHospital;
     private javax.swing.JButton btnConsultarHospital;
-    private javax.swing.JComboBox<String> cboCirugias;
+    private javax.swing.JComboBox<String> cboIdHospita;
     private javax.swing.JButton jButtonMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -203,11 +260,11 @@ public class Hospitales extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblConsultorios;
+    private javax.swing.JLabel lblCirugias;
+    private javax.swing.JLabel lblColor1;
     private javax.swing.JLabel lblConsultorios1;
-    private javax.swing.JLabel lblConsultorios2;
-    private javax.swing.JLabel lblConsultorios3;
     private javax.swing.JLabel lblPropiedad1;
-    private javax.swing.JTextField txtHospital;
+    private javax.swing.JLabel lbldescripcion;
+    private javax.swing.JLabel lblniveles;
     // End of variables declaration//GEN-END:variables
 }

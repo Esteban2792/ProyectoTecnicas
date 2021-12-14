@@ -25,6 +25,14 @@ public class menuDoctor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        menuBar1 = new java.awt.MenuBar();
+        menu1 = new java.awt.Menu();
+        menu2 = new java.awt.Menu();
+        menuBar2 = new java.awt.MenuBar();
+        menu3 = new java.awt.Menu();
+        menu4 = new java.awt.Menu();
+        popupMenu1 = new java.awt.PopupMenu();
+        jMenu1 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         jbutonPacientes = new javax.swing.JButton();
         jButtonCitas = new javax.swing.JButton();
@@ -32,11 +40,41 @@ public class menuDoctor extends javax.swing.JFrame {
         jButtonHospitales = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
         btnInternamientos = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        Mhospital = new javax.swing.JMenu();
+        MhospitalIngresar = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        mPacientes = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        mPaciente = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        minternamientos = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        mCita = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        mSalir = new javax.swing.JMenuItem();
+
+        menu1.setLabel("File");
+        menuBar1.add(menu1);
+
+        menu2.setLabel("Edit");
+        menuBar1.add(menu2);
+
+        menu3.setLabel("File");
+        menuBar2.add(menu3);
+
+        menu4.setLabel("Edit");
+        menuBar2.add(menu4);
+
+        popupMenu1.setLabel("popupMenu1");
+
+        jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jbutonPacientes.setText("Pacientes");
@@ -87,7 +125,81 @@ public class menuDoctor extends javax.swing.JFrame {
         });
         jPanel1.add(btnInternamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 300));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 300));
+
+        Mhospital.setText("Hospitales");
+
+        MhospitalIngresar.setText("Ingresar un Hospital");
+        MhospitalIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MhospitalIngresarActionPerformed(evt);
+            }
+        });
+        Mhospital.add(MhospitalIngresar);
+
+        jMenuBar1.add(Mhospital);
+
+        jMenu2.setText("Pacientes");
+
+        mPacientes.setText("Agregar Pacientes");
+        mPacientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mPacientesActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mPacientes);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Operaciones y Cirugias");
+
+        mPaciente.setText("Agregar Cirugias y Operaciones");
+        mPaciente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mPacienteActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mPaciente);
+
+        jMenuBar1.add(jMenu3);
+
+        jMenu4.setText("Internamientos");
+
+        minternamientos.setText("Internar Paciente");
+        minternamientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minternamientosActionPerformed(evt);
+            }
+        });
+        jMenu4.add(minternamientos);
+
+        jMenuBar1.add(jMenu4);
+
+        jMenu5.setText("Citas");
+
+        mCita.setText("Sacar Cita PostOperatoria");
+        mCita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mCitaActionPerformed(evt);
+            }
+        });
+        jMenu5.add(mCita);
+
+        jMenuBar1.add(jMenu5);
+
+        jMenu6.setText("Salir");
+
+        mSalir.setText("Salir del Menu");
+        mSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mSalirActionPerformed(evt);
+            }
+        });
+        jMenu6.add(mSalir);
+
+        jMenuBar1.add(jMenu6);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -141,6 +253,49 @@ public class menuDoctor extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnInternamientosActionPerformed
 
+    private void MhospitalIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MhospitalIngresarActionPerformed
+        // TODO add your handling code here:
+        DoctorHospital AbrirVentanaDoctorHospital = new DoctorHospital();
+        AbrirVentanaDoctorHospital.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_MhospitalIngresarActionPerformed
+
+    private void mPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPacientesActionPerformed
+        // TODO add your handling code here:
+        DoctorPaciente VentanaPacientes = new DoctorPaciente();
+        VentanaPacientes.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mPacientesActionPerformed
+
+    private void mPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPacienteActionPerformed
+        // TODO add your handling code here:
+        DoctorOperaciones AbrirVentanaOperaciones = new DoctorOperaciones();
+        AbrirVentanaOperaciones.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mPacienteActionPerformed
+
+    private void minternamientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minternamientosActionPerformed
+        // TODO add your handling code here:
+        DoctorInternamientos VentanaInternamientos = new DoctorInternamientos();
+        VentanaInternamientos.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_minternamientosActionPerformed
+
+    private void mCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCitaActionPerformed
+        // TODO add your handling code here:
+         DoctorCita AbrirVentanaCitas = new DoctorCita();
+        AbrirVentanaCitas.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mCitaActionPerformed
+
+    private void mSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSalirActionPerformed
+        // TODO add your handling code here:
+           
+        Inicio AbrirVentanaLogin = new Inicio();
+        AbrirVentanaLogin.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_mSalirActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -184,12 +339,33 @@ public class menuDoctor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Mhospital;
+    private javax.swing.JMenuItem MhospitalIngresar;
     private javax.swing.JButton btnInternamientos;
     private javax.swing.JButton btnOperaciones;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton jButtonCitas;
     private javax.swing.JButton jButtonHospitales;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbutonPacientes;
+    private javax.swing.JMenuItem mCita;
+    private javax.swing.JMenuItem mPaciente;
+    private javax.swing.JMenuItem mPacientes;
+    private javax.swing.JMenuItem mSalir;
+    private java.awt.Menu menu1;
+    private java.awt.Menu menu2;
+    private java.awt.Menu menu3;
+    private java.awt.Menu menu4;
+    private java.awt.MenuBar menuBar1;
+    private java.awt.MenuBar menuBar2;
+    private javax.swing.JMenuItem minternamientos;
+    private java.awt.PopupMenu popupMenu1;
     // End of variables declaration//GEN-END:variables
 }

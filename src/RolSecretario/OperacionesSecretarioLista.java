@@ -5,16 +5,44 @@
  */
 package RolSecretario;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import login.Conexion;
+
 
 public class OperacionesSecretarioLista extends javax.swing.JFrame {
-
+Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
+    CallableStatement SeleccionaTabla;
+    ResultSet resultado;
     /**
      * Creates new form ListaOperaciones
      */
     public OperacionesSecretarioLista() {
         initComponents();
     }
-
+public void CargarListaOperaciones(){
+            DefaultTableModel tablaOperaciones= new DefaultTableModel();
+       try{
+       tablaOperaciones.addColumn("ID Operacion");
+       tablaOperaciones.addColumn("ID Hospital");
+       tablaOperaciones.addColumn("ID Doctor");
+       tablaOperaciones.addColumn("ID Paciente");
+       tablaOperaciones.addColumn("Operación");
+       SeleccionaTabla=ingresa.prepareCall("Select * from operaciones");
+       resultado=SeleccionaTabla.executeQuery();
+       while (resultado.next()){
+       Object datos[]=new  Object[5];
+       for (int filas=0; filas<5; filas++){
+           datos[filas]=resultado.getString(filas+1);
+       }
+       tablaOperaciones.addRow(datos);
+       }
+       this.jtOperaciones.setModel(tablaOperaciones);//jTable---jdatos
+       }catch (Exception e){}
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,7 +55,7 @@ public class OperacionesSecretarioLista extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtOperaciones = new javax.swing.JTable();
         btnRegresarOperaciones = new javax.swing.JButton();
         btnConsultarListaOperaciones = new javax.swing.JButton();
 
@@ -41,7 +69,8 @@ public class OperacionesSecretarioLista extends javax.swing.JFrame {
         jLabel1.setText("Lista de Operaciones");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, -1, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtOperaciones.setAutoCreateRowSorter(true);
+        jtOperaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -52,7 +81,7 @@ public class OperacionesSecretarioLista extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtOperaciones);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 540, 370));
 
@@ -65,6 +94,11 @@ public class OperacionesSecretarioLista extends javax.swing.JFrame {
         jPanel1.add(btnRegresarOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 430, -1, -1));
 
         btnConsultarListaOperaciones.setText("Consultar");
+        btnConsultarListaOperaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarListaOperacionesActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnConsultarListaOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3, 0, 560, 470));
@@ -79,6 +113,11 @@ public class OperacionesSecretarioLista extends javax.swing.JFrame {
         this.setVisible(false);
         
     }//GEN-LAST:event_btnRegresarOperacionesActionPerformed
+
+    private void btnConsultarListaOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarListaOperacionesActionPerformed
+        // TODO add your handling code here:
+        CargarListaOperaciones();
+    }//GEN-LAST:event_btnConsultarListaOperacionesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,6 +161,6 @@ public class OperacionesSecretarioLista extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jtOperaciones;
     // End of variables declaration//GEN-END:variables
 }

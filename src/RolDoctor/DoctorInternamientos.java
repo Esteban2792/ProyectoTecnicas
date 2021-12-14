@@ -5,9 +5,15 @@
  */
 package RolDoctor;
 
+import ContratosyPagos.Contrato;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import login.Conexion;
+
 
 public class DoctorInternamientos extends javax.swing.JFrame {
-
+Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
     /**
      * Creates new form Internamientos
      */
@@ -15,6 +21,46 @@ public class DoctorInternamientos extends javax.swing.JFrame {
         initComponents();
     }
 
+    public void AgregaInternamiento(){
+        String insertar = "INSERT INTO internamientos (idHospital, idPaciente, motivo) values (?,?,?)";
+        try{
+            java.sql.PreparedStatement registra = ingresa.prepareCall(insertar);
+            registra.setString(1, txtIdHospital.getText());
+            registra.setString(2, txtIdPaciente.getText());
+            registra.setString(3, txtmotivo.getText());
+            int agregar = registra.executeUpdate();
+            if (agregar > 0){
+                JOptionPane.showMessageDialog(this, "Internamiento exitoso","Bien", JOptionPane.QUESTION_MESSAGE);
+            }else{
+                 JOptionPane.showMessageDialog(this, "Internamiento NO agregado","Atención", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch(Exception e){
+        } finally {
+            txtInternamiento.setText("");
+                txtIdHospital.setText("");
+                txtIdPaciente.setText("");
+                txtmotivo.setText("");
+                
+        }
+   }
+    
+    
+    void consultarDatosInternamiento(){
+            String query = "SELECT * FROM internamientos WHERE idInternamiento = '"+txtInternamiento.getText().trim()+"'";
+            try {
+                java.sql.Statement st = ingresa.createStatement();
+                java.sql.ResultSet rs = st.executeQuery(query);
+                while (rs.next()) {
+                    txtIdHospital.setText(rs.getString("idHospital"));
+                    txtIdPaciente.setText(rs.getString("idPaciente"));
+                    txtmotivo.setText(rs.getString("motivo"));
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,15 +75,16 @@ public class DoctorInternamientos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtmotivo = new javax.swing.JTextField();
+        txtInternamiento = new javax.swing.JTextField();
+        txtIdHospital = new javax.swing.JTextField();
+        txtIdPaciente = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         btnMenu = new javax.swing.JButton();
         btnAgregarInternamiento = new javax.swing.JButton();
         btnConsultarInternamiento = new javax.swing.JButton();
         btnListaInternamientos = new javax.swing.JButton();
+        btnContrato = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -60,16 +107,16 @@ public class DoctorInternamientos extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Motivo");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 260, 30));
+        jPanel1.add(txtmotivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 260, 30));
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtInternamiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtInternamientoActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 110, 30));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 110, 30));
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 110, 30));
+        jPanel1.add(txtInternamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 110, 30));
+        jPanel1.add(txtIdHospital, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 110, 30));
+        jPanel1.add(txtIdPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 110, 30));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Internamientos");
@@ -81,13 +128,23 @@ public class DoctorInternamientos extends javax.swing.JFrame {
                 btnMenuActionPerformed(evt);
             }
         });
-        jPanel1.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, -1, -1));
+        jPanel1.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 290, -1, -1));
 
         btnAgregarInternamiento.setText("Agregar");
-        jPanel1.add(btnAgregarInternamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
+        btnAgregarInternamiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarInternamientoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAgregarInternamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, -1, -1));
 
         btnConsultarInternamiento.setText("Consultar");
-        jPanel1.add(btnConsultarInternamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, -1, -1));
+        btnConsultarInternamiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarInternamientoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnConsultarInternamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, -1, -1));
 
         btnListaInternamientos.setText("Consultar lista");
         btnListaInternamientos.addActionListener(new java.awt.event.ActionListener() {
@@ -95,16 +152,24 @@ public class DoctorInternamientos extends javax.swing.JFrame {
                 btnListaInternamientosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnListaInternamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 290, -1, -1));
+        jPanel1.add(btnListaInternamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 7, 430, 340));
+        btnContrato.setText("Contrato");
+        btnContrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContratoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnContrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, -3, 470, 360));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtInternamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInternamientoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtInternamientoActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         
@@ -121,6 +186,23 @@ public class DoctorInternamientos extends javax.swing.JFrame {
         this.setVisible(false);
         
     }//GEN-LAST:event_btnListaInternamientosActionPerformed
+
+    private void btnConsultarInternamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarInternamientoActionPerformed
+        // TODO add your handling code here:
+        consultarDatosInternamiento();
+    }//GEN-LAST:event_btnConsultarInternamientoActionPerformed
+
+    private void btnAgregarInternamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarInternamientoActionPerformed
+        // TODO add your handling code here:
+        AgregaInternamiento();
+    }//GEN-LAST:event_btnAgregarInternamientoActionPerformed
+
+    private void btnContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContratoActionPerformed
+        // TODO add your handling code here:
+        Contrato VentanaContrato = new Contrato();
+        VentanaContrato.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnContratoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -161,6 +243,7 @@ public class DoctorInternamientos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarInternamiento;
     private javax.swing.JButton btnConsultarInternamiento;
+    private javax.swing.JButton btnContrato;
     private javax.swing.JButton btnListaInternamientos;
     private javax.swing.JButton btnMenu;
     private javax.swing.JLabel jLabel1;
@@ -169,9 +252,9 @@ public class DoctorInternamientos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField txtIdHospital;
+    private javax.swing.JTextField txtIdPaciente;
+    private javax.swing.JTextField txtInternamiento;
+    private javax.swing.JTextField txtmotivo;
     // End of variables declaration//GEN-END:variables
 }

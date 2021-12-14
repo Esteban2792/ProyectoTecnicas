@@ -5,19 +5,49 @@
  */
 package RolSecretario;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import login.Conexion;
+
 /**
  *
  * @author Pc
  */
 public class CitasSecretarioLista extends javax.swing.JFrame {
-
+Conexion BaseDatos = new Conexion();
+    Connection ingresa = Conexion.getConnection();
+    CallableStatement SeleccionaTabla;
+    ResultSet resultado;
     /**
      * Creates new form ListaCitas
      */
     public CitasSecretarioLista() {
         initComponents();
     }
-
+ public void CargarListaCitas(){
+            DefaultTableModel tabla= new DefaultTableModel();
+       try{
+       tabla.addColumn("ID de la Cita");
+       tabla.addColumn("ID del Hospital");
+       tabla.addColumn("ID de la Operación");
+       tabla.addColumn("ID del Paciente");
+       tabla.addColumn("Fecha de la Cita");
+      
+       
+       SeleccionaTabla=ingresa.prepareCall("Select * from citaPost");
+       resultado=SeleccionaTabla.executeQuery();
+       while (resultado.next()){
+       Object datos[]=new  Object[5];
+       for (int filas=0; filas<5; filas++){
+           datos[filas]=resultado.getString(filas+1);
+       }
+       tabla.addRow(datos);
+       }
+       this.jtCitas.setModel(tabla);//jTable---jdatos
+       }catch (Exception e){}
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,7 +59,7 @@ public class CitasSecretarioLista extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtCitas = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         btnConsultarCita = new javax.swing.JButton();
         btnRegresarCitas = new javax.swing.JButton();
@@ -40,7 +70,7 @@ public class CitasSecretarioLista extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtCitas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -51,7 +81,7 @@ public class CitasSecretarioLista extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtCitas);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 430, 340));
 
@@ -82,6 +112,7 @@ public class CitasSecretarioLista extends javax.swing.JFrame {
 
     private void btnConsultarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarCitaActionPerformed
         // TODO add your handling code here:
+        CargarListaCitas();
     }//GEN-LAST:event_btnConsultarCitaActionPerformed
 
     private void btnRegresarCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarCitasActionPerformed
@@ -134,6 +165,6 @@ public class CitasSecretarioLista extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jtCitas;
     // End of variables declaration//GEN-END:variables
 }
